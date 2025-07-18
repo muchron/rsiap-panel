@@ -22,6 +22,7 @@ class ArticlesFactory extends Factory
             'title' => fake()->sentence(),
             'slug' => fake()->unique()->slug(),
             'body' => fake()->text(),
+            'status' => fake()->randomElement(['draft', 'published']),
             'cover' => fake()->imageUrl(),
             'view' => fake()->numberBetween(0, 100),
             'user_id' => User::inRandomOrder()->first()?->id,

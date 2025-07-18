@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Articles extends Model
 {
     /** @use HasFactory<\Database\Factories\ArticlesFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected $guarded = ['id'];
+
 
     public function user()
     {
@@ -22,6 +26,6 @@ class Articles extends Model
 
     public function labels()
     {
-        return $this->hasMany(ArticleLabels::class);
+        return $this->belongsToMany(Labels::class, 'article_labels', 'articles_id', 'label_id');
     }
 }

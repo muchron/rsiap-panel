@@ -12,8 +12,9 @@ return new class extends Migration {
     {
         Schema::create('article_labels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('articles_id')->constrained('articles');
-            $table->foreignId('label_id')->constrained('labels');
+            $table->foreignId('articles_id')->constrained('articles')->onDelete('cascade');
+            $table->foreignId('label_id')->constrained('labels')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

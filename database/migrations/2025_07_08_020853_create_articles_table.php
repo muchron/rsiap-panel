@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('slug')->unique();
             $table->text('body');
             $table->string('cover')->nullable();
+            $table->enum('status', ['draft', 'published'])->default('draft')->nullable();
             $table->integer('view')->default(0);
             $table->foreignId('user_id')->constrained();
             $table->foreignId('category_id')->constrained();

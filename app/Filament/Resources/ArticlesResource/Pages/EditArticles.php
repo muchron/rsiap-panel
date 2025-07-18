@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ArticlesResource\Pages;
 
 use App\Filament\Resources\ArticlesResource;
+use App\Models\ArticleLabels;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
@@ -15,5 +16,10 @@ class EditArticles extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function afterSave(): void
+    {
+
     }
 }

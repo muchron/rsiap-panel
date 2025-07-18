@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             ->has(Articles::factory()->count(3))
             ->count(10)
             ->create();
-        Articles::factory()->count(10)->create();
+        // Articles::factory()->count(10)->create();
         ArticleLabels::factory()->count(10)->create();
 
 
