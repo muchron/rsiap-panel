@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ArticlesResource\Api\Transformers\ArticlesTransformer;
 use App\Filament\Resources\ArticlesResource\Pages;
+use App\Filament\Resources\ArticlesResource\Widgets\ArticlesChart;
 use App\Models\Articles;
 use App\Models\Labels;
 use App\Models\User;
@@ -25,7 +26,7 @@ class ArticlesResource extends Resource
 {
     protected static ?string $model = Articles::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static string|array $routeMiddleware = [];
 
     public static function form(Form $form): Form
@@ -59,7 +60,16 @@ class ArticlesResource extends Resource
                         ->required()
                         ->relationship('category', 'name')
                         ->createOptionForm([
-                            Forms\Components\TextInput::make('name')->required(),
+                            Forms\Components\TextInput::make('name')
+                                ->afterStateUpdated(function (Set $set, $state) {
+                                    $set('slug', str($state)->slug());
+                                })
+                                ->live(onBlur: true)
+                                ->required(),
+                            Forms\Components\Hidden::make('slug')
+                                ->afterStateUpdated(function (Closure $set) {
+                                    $set('is_slug_changed_manually', true);
+                                })->required(),
                         ])
                         ->createOptionUsing(function (array $data) {
                             return \App\Models\Categories::create($data)->getKey();
@@ -76,7 +86,16 @@ class ArticlesResource extends Resource
                         ->preload()
                         ->required()
                         ->createOptionForm([
-                            Forms\Components\TextInput::make('name')->required(),
+                            Forms\Components\TextInput::make('name')
+                                ->afterStateUpdated(function (Set $set, $state) {
+                                    $set('slug', str($state)->slug());
+                                })
+                                ->live(onBlur: true)
+                                ->required(),
+                            Forms\Components\Hidden::make('slug')
+                                ->afterStateUpdated(function (Closure $set) {
+                                    $set('is_slug_changed_manually', true);
+                                })->required(),
                         ])
                         ->createOptionUsing(function (array $data) {
                             return Labels::create($data)->getKey();

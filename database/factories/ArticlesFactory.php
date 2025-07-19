@@ -26,6 +26,7 @@ class ArticlesFactory extends Factory
             'cover' => fake()->imageUrl(),
             'view' => fake()->numberBetween(0, 100),
             'user_id' => User::inRandomOrder()->first()?->id,
+            'created_at' => fake()->dateTimeBetween('-5 month', 'now'),
             'category_id' => Categories::inRandomOrder()->first()?->id,
         ];
     }

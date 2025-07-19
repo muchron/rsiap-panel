@@ -28,10 +28,10 @@ class DetailHandler extends Handlers
 
         $query = static::getEloquentQuery();
 
+        // dd($query);
         $query = QueryBuilder::for(
-            $query->where(static::getKeyName(), $id)
-                ->where('status', 'published')
-        )
+            $query->where(['slug' => $id])
+        )->where('status', 'published')
             ->first();
 
         if (!$query)

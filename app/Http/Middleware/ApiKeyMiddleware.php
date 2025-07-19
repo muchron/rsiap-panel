@@ -16,7 +16,7 @@ class ApiKeyMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $header = $request->header('X-API-KEY');
-        if (!$header || $header !== 'test123') {
+        if (!$header || $header !== 'tJJxupMgrqvY7YaPbE2zIdH18VSyL7SM') {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
         return $next($request);

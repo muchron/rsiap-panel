@@ -20,17 +20,9 @@ class DatabaseSeeder extends Seeder
         Categories::factory()->count(10)->create();
         Labels::factory()->count(10)->create();
         User::factory()
-            ->has(Articles::factory()->count(3))
+            ->has(Articles::factory()->count(5))
             ->count(10)
             ->create();
-        // Articles::factory()->count(10)->create();
         ArticleLabels::factory()->count(10)->create();
-
-
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'username' => 'test@example.com',
-        // ]);
     }
 }

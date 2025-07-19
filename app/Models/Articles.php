@@ -28,4 +28,13 @@ class Articles extends Model
     {
         return $this->belongsToMany(Labels::class, 'article_labels', 'articles_id', 'label_id');
     }
+
+    public function scopeMonth($builder, $month)
+    {
+        return $builder->whereMonth('created_at', $month);
+    }
+    public function scopeIsPublished($builder)
+    {
+        return $builder->where('status', 'published');
+    }
 }

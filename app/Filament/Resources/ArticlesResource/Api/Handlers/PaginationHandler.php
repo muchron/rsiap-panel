@@ -14,6 +14,7 @@ class PaginationHandler extends Handlers
     public static bool $public = true;
 
 
+
     /**
      * List of Articles
      *
@@ -24,14 +25,61 @@ class PaginationHandler extends Handlers
     {
         $query = static::getEloquentQuery();
 
-        $query = QueryBuilder::for($query)
+        $query = $this->applyQueryBuilder($query);
+
+        $limit = request()->query('limit');
+        $random = request()->boolean('random');
+
+        if ($random && $limit) {
+            return $this->getRandomArticles($query, $limit);
+        }
+
+        if ($limit) {
+            return $this->getLimitedArticles($query, $limit);
+        }
+
+        return $this->getPaginatedArticles($query);
+    }
+
+    protected function applyQueryBuilder($query)
+    {
+        return QueryBuilder::for($query)
+            ->isPublished()
             ->allowedFields($this->getAllowedFields() ?? [])
             ->allowedSorts($this->getAllowedSorts() ?? [])
             ->allowedFilters($this->getAllowedFilters() ?? [])
-            ->allowedIncludes($this->getAllowedIncludes() ?? [])
-            ->paginate(request()->query('per_page'))
+            ->allowedIncludes($this->getAllowedIncludes() ?? []);
+    }
+
+    protected function getRandomArticles($query, $limit)
+    {
+        $data = $query
+            ->orderByDesc('views')
+            ->limit(50)
+            ->get()
+            ->shuffle()
+            ->take($limit);
+
+        return ArticlesTransformer::collection($data);
+    }
+
+    protected function getLimitedArticles($query, $limit)
+    {
+        $data = $query
+            ->orderByDesc('views')
+            ->limit($limit)
+            ->get();
+
+        return ArticlesTransformer::collection($data);
+    }
+
+    protected function getPaginatedArticles($query)
+    {
+        $data = $query
+            ->paginate(request()->query('per_page', 10))
             ->appends(request()->query());
 
-        return ArticlesTransformer::collection($query);
+        return ArticlesTransformer::collection($data);
     }
+
 }

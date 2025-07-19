@@ -11,4 +11,9 @@ class Labels extends Model
     /** @use HasFactory<\Database\Factories\LabelsFactory> */
     use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
+
+    public function articles()
+    {
+        return $this->belongsToMany(Articles::class, 'article_labels', 'label_id', 'articles_id');
+    }
 }
