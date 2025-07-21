@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ApiService;
 use App\Models\ArticleLabels;
 use App\Models\Articles;
 use App\Models\Categories;
@@ -24,5 +25,6 @@ class DatabaseSeeder extends Seeder
             ->count(10)
             ->create();
         ArticleLabels::factory()->count(10)->create();
+        ApiService::factory()->count(4)->create();
     }
 }
