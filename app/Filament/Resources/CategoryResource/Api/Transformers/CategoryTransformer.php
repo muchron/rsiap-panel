@@ -29,9 +29,11 @@ class CategoryTransformer extends JsonResource
                 return [
                     'slug' => $article->slug,
                     'title' => $article->title,
+                    'author' => $article->user->name,
                     'cover' => env('APP_URL') . Storage::url($article->cover),
                     'status' => $article->status,
-                    'body' => Str::limit($article->body, 100)
+                    'body' => Str::limit($article->body, 100),
+                    'created_at' => $article->created_at,
 
                 ];
             }),

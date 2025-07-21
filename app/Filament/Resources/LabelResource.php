@@ -7,8 +7,10 @@ use App\Filament\Resources\LabelResource\RelationManagers;
 use App\Models\Label;
 use App\Models\Labels;
 use Carbon\Carbon;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -25,7 +27,17 @@ class LabelResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->afterStateUpdated(function (Set $set, $state) {
+                        $set('slug', str($state)->slug());
+                    })
+                    ->live(onBlur: true)
+                    ->required(),
+                Forms\Components\TextInput::make('slug')
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('is_slug_changed_manually', true);
+                    })
+                    ->required(),
             ]);
     }
 

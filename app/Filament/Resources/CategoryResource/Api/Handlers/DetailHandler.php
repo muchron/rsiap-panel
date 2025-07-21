@@ -11,8 +11,9 @@ use App\Filament\Resources\CategoryResource\Api\Transformers\CategoryTransformer
 
 class DetailHandler extends Handlers
 {
-    public static string | null $uri = '/{id}';
-    public static string | null $resource = CategoryResource::class;
+    public static string|null $uri = '/{id}';
+    public static string|null $resource = CategoryResource::class;
+    public static bool $public = true;
 
 
     /**
@@ -24,15 +25,16 @@ class DetailHandler extends Handlers
     public function handler(Request $request)
     {
         $id = $request->route('id');
-        
+
         $query = static::getEloquentQuery();
 
         $query = QueryBuilder::for(
-            $query->where(static::getKeyName(), $id)
+            $query->where('slug', $id)
         )
             ->first();
 
-        if (!$query) return static::sendNotFoundResponse();
+        if (!$query)
+            return static::sendNotFoundResponse();
 
         return new CategoryTransformer($query);
     }

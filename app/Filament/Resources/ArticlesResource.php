@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ArticlesResource\Api\Transformers\ArticlesTransformer;
 use App\Filament\Resources\ArticlesResource\Pages;
 use App\Filament\Resources\ArticlesResource\Widgets\ArticlesChart;
+use App\Models\ArticleLabels;
 use App\Models\Articles;
 use App\Models\Labels;
 use App\Models\User;
@@ -97,13 +98,31 @@ class ArticlesResource extends Resource
                                     $set('is_slug_changed_manually', true);
                                 })->required(),
                         ])
-                        ->createOptionUsing(function (array $data) {
-                            return Labels::create($data)->getKey();
-                        }),
+                    // ->createOptionUsing(function (array $data) {
+                    //     return Labels::create($data)->getKey();
+                    // }),
                 ]),
 
                 Forms\Components\Grid::make(1)->schema([
-                    Forms\Components\RichEditor::make('body')->required(),
+                    Forms\Components\RichEditor::make('body')
+                        ->toolbarButtons([
+                            'attachFiles',
+                            'blockquote',
+                            'bold',
+                            'bulletList',
+                            'codeBlock',
+                            'h1',
+                            'h2',
+                            'h3',
+                            'italic',
+                            'link',
+                            'orderedList',
+                            'redo',
+                            'strike',
+                            'underline',
+                            'undo',
+                        ])
+                        ->required(),
                     Forms\Components\Radio::make('status')
                         ->options([
                             'draft' => 'Draft',
@@ -149,7 +168,7 @@ class ArticlesResource extends Resource
                 Tables\Columns\TextColumn::make('category.name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('labels.label.name')
+                Tables\Columns\TextColumn::make('labels.name')
                     ->color('warning')
                     ->searchable()
                     ->badge()

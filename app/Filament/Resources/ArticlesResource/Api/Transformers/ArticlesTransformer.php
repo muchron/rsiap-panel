@@ -27,8 +27,16 @@ class ArticlesTransformer extends JsonResource
             'body' => $this->resource->body,
             'cover' => env('APP_URL') . Storage::url($this->resource->cover),
             'author' => $this->resource->user->name,
-            'category' => $this->resource->category->name,
-            'labels' => $this->resource->labels->pluck('name'),
+            'category' => [
+                'name' => $this->resource->category->name,
+                'slug' => $this->resource->category->slug
+            ],
+            'labels' => $this->resource->labels->map(function ($label) {
+                return [
+                    'name' => $label->name,
+                    'slug' => $label->slug,
+                ];
+            })->toArray(),
             'status' => $this->resource->status,
             'views' => $this->resource->view,
             'created_at' => $this->resource->created_at,

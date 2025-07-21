@@ -39,6 +39,7 @@ class CategoryResource extends Resource
                     ->afterStateUpdated(function (Closure $set) {
                         $set('is_slug_changed_manually', true);
                     })
+                    ->readOnly()
                     ->required()
             ]);
     }
