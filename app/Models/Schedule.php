@@ -14,7 +14,7 @@ class Schedule extends Model
     protected $guarded = ['id'];
     public function polyclinic()
     {
-        return $this->belongsTo(Polyclinic::class);
+        return $this->belongsTo(Polyclinic::class, 'polyclinic_id', 'code');
     }
     public function doctor()
     {

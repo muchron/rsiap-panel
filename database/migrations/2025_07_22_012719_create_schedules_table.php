@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -16,12 +17,12 @@ return new class extends Migration {
             $table->string('day');
             $table->time('start_at');
             $table->time('end_at');
-            $table->string('polyclinic_id');
+            $table->string('polyclinic_code');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('doctor_id')->references('username')->on('users');
-            $table->foreign('polyclinic_id')->references('id')->on('polyclinics');
+            $table->foreign('polyclinic_code')->references('code')->on('polyclinics');
         });
     }
 
