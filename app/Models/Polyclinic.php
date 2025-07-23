@@ -12,4 +12,8 @@ class Polyclinic extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'polyclinic_code', 'code');
+    }
 }

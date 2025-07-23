@@ -12,4 +12,9 @@ class Specialist extends Model
     protected $keyType = 'string';
     protected $guarded = [];
 
+    public function doctor()
+    {
+        return $this->hasMany(Doctor::class);
+    }
+
 }

@@ -33,16 +33,14 @@ class DatabaseSeeder extends Seeder
             $article->save();
         });
 
-        // Articles::factory()->count(10)
-        //     ->hasAttached(User::where('username', 'like', '1.%')->inRandomOrder()->first())
-        //     ->create();
-
         ArticleLabels::factory()->count(10)->create();
         ApiService::factory()->count(4)->create();
         $this->polyclinic();
         $this->schedule();
-        new SpecialistSeeder()->run();
-        new DoctorSeeder()->run();
+        $specialistSeeder = new SpecialistSeeder();
+        $specialistSeeder->run();
+        $doctorSeeder = new DoctorSeeder();
+        $doctorSeeder->run();
     }
     function user()
     {

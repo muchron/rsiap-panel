@@ -49,11 +49,11 @@ class PolyclinicResource extends Resource
                     return $query
                         ->when(
                             $data['created_form'],
-                            fn(Builder $query, $date) => $query->whereDate('created_at', '>=', $date),
+                            fn (Builder $query, $date) => $query->whereDate('created_at', '>=', $date),
                         )
                         ->when(
                             $data['created_until'],
-                            fn(Builder $query, $date) => $query->whereDate('created_at', '<=', $date),
+                            fn (Builder $query, $date) => $query->whereDate('created_at', '<=', $date),
                         );
                 })
 
@@ -83,5 +83,12 @@ class PolyclinicResource extends Resource
             'create' => Pages\CreatePolyclinic::route('/create'),
             'edit' => Pages\EditPolyclinic::route('/{record}/edit'),
         ];
+    }
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

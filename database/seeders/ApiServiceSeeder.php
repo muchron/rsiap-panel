@@ -13,6 +13,6 @@ class ApiServiceSeeder extends Seeder
      */
     public function run(): void
     {
-        ApiServiceFactory::new()->count(4)->create();
+        // ApiServiceFactory::new()->count(4)->create();
     }
 }
