@@ -10,9 +10,11 @@ use App\Models\ApiService;
 use App\Models\Categories;
 use App\Models\Polyclinic;
 use App\Models\ArticleLabels;
+use App\Models\Specialist;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -39,7 +41,8 @@ class DatabaseSeeder extends Seeder
         ApiService::factory()->count(4)->create();
         $this->polyclinic();
         $this->schedule();
-
+        new SpecialistSeeder()->run();
+        new DoctorSeeder()->run();
     }
     function user()
     {
@@ -66,7 +69,6 @@ class DatabaseSeeder extends Seeder
     function schedule()
     {
         $sources = DB::connection('db2')->table('jadwal')
-            ->where('kd_dokter', '!=', '1.101.1112')
             ->get();
 
         foreach ($sources as $source => $value) {
@@ -88,11 +90,14 @@ class DatabaseSeeder extends Seeder
         foreach ($source as $key => $value) {
             $data = [
                 'code' => $value->kd_poli,
+                'slug' => Str::slug($value->nm_poli),
                 'name' => $value->nm_poli
             ];
             Polyclinic::create($data);
         }
     }
+
+
 
 
 }

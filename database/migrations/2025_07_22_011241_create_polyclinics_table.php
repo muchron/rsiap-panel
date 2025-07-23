@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('polyclinics', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
+            $table->string('slug')->unique();
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();

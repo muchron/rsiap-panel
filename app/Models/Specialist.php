@@ -9,4 +9,7 @@ class Specialist extends Model
 {
     /** @use HasFactory<\Database\Factories\SpecialistFactory> */
     use HasFactory;
+    protected $keyType = 'string';
+    protected $guarded = [];
+
 }

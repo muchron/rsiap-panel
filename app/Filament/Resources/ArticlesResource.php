@@ -58,7 +58,7 @@ class ArticlesResource extends Resource
                 ]),
                 Forms\Components\Grid::make(2)->schema([
                     Forms\Components\Select::make('category_id')
-                        ->required()
+                    ->required()
                         ->relationship('category', 'name')
                         ->createOptionForm([
                             Forms\Components\TextInput::make('name')
@@ -171,7 +171,7 @@ class ArticlesResource extends Resource
                 Tables\Columns\TextColumn::make('labels.name')
                     ->color('warning')
                     ->searchable()
-                    ->badge()
+                ->badge()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

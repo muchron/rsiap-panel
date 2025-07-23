@@ -6,6 +6,7 @@ use App\Models\Polyclinic;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PolyclinicSeeder extends Seeder
 {
@@ -21,6 +22,7 @@ class PolyclinicSeeder extends Seeder
         foreach ($source as $key => $value) {
             $data = [
                 'code' => $value->kd_poli,
+                'slug' => Str::slug($value->nm_poli),
                 'name' => $value->nm_poli
             ];
             Polyclinic::create($data);
