@@ -46,6 +46,7 @@ class DatabaseSeeder extends Seeder
     {
         try {
             $source = DB::connection('db2')->table('pegawai')
+                ->where('stts_aktif', 'AKTIF')
                 ->get();
 
 

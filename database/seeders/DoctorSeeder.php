@@ -16,6 +16,7 @@ class DoctorSeeder extends Seeder
     public function run(): void
     {
         DB::connection('db2')->table('dokter')
+            ->where('status', '1')
             ->where('kd_sps', '!=', '-')
             ->get()
             ->each(function ($value) {
