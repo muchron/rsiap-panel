@@ -26,7 +26,7 @@ class HasDoctorHandler extends Handlers
     {
 
         $query = static::getModel()
-            ->groupBy('doctor_id')
+            ::groupBy('doctor_id')
             ->get();
 
 
