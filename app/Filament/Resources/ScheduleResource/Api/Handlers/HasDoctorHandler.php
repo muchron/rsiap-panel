@@ -25,12 +25,10 @@ class HasDoctorHandler extends Handlers
     public function handler()
     {
 
-        $query = static::getEloquentQuery();
-
-        $query = QueryBuilder::for(
-            $query->groupBy('doctor_id')
-        )
+        $query = static::getModel()
+            ->groupBy('doctor_id')
             ->get();
+
 
         if (!$query)
             return static::sendNotFoundResponse();
