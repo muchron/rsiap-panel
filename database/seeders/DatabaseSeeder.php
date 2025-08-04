@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         Labels::factory()->count(10)->create();
         $this->user();
 
-        Articles::factory()->count(10)->create()->each(function ($article) {
+        Articles::factory()->count(50)->create()->each(function ($article) {
             $user = User::where('username', 'like', '1.%')->inRandomOrder()->first();
             $article->user()->associate($user);
             $article->save();
@@ -72,6 +72,7 @@ class DatabaseSeeder extends Seeder
         foreach ($sources as $source => $value) {
             $data = [
                 'doctor_id' => $value->kd_dokter,
+                'slug' => DB::connection('db2')->table('dokter')->where('kd_dokter', $value->kd_dokter)->value('nm_dokter'),
                 'day' => $value->hari_kerja,
                 'start_at' => $value->jam_mulai,
                 'polyclinic_code' => $value->kd_poli,

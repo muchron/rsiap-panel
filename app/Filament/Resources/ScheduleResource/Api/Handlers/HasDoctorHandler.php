@@ -25,10 +25,12 @@ class HasDoctorHandler extends Handlers
     public function handler()
     {
 
-        $query = static::getModel()
-            ::groupBy('doctor_id')
-            ->get();
+        $query = static::getEloquentQuery();
 
+        $query = QueryBuilder::for(
+            $query->groupBy('doctor_id')
+        )
+            ->get();
 
         if (!$query)
             return static::sendNotFoundResponse();
@@ -45,7 +47,7 @@ class HasDoctorHandler extends Handlers
             'code' => 200,
             'data' => $data->map(function ($item) {
                 return [
-                    'id' => $item->doctor->doctor_id,
+                    'id' => $item->doctor_id,
                     'slug' => $item->doctor->slug,
                     'name' => $item->doctor->user->name,
                 ];

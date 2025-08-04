@@ -21,7 +21,7 @@ class ArticlesFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'slug' => fake()->unique()->slug(),
-            'body' => fake()->text(),
+            'body' => fake()->paragraph(),
             'status' => fake()->randomElement(['draft', 'published']),
             'cover' => fake()->imageUrl(),
             'view' => fake()->numberBetween(0, 100),
