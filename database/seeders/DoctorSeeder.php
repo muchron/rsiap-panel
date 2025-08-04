@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Doctor;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -20,9 +21,10 @@ class DoctorSeeder extends Seeder
             ->where('kd_sps', '!=', '-')
             ->get()
             ->each(function ($value) {
+                $name = User::where('username', $value->kd_dokter)->first();
                 Doctor::create([
                     'doctor_id' => $value->kd_dokter,
-                    'slug' => Str::slug($value->nm_dokter),
+                    'slug' => Str::slug($name->name),
                     'specialist_id' => $value->kd_sps,
                     'photo' => fake()->imageUrl(),
                     'about' => fake()->sentences(50, true)

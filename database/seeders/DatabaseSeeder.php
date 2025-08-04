@@ -70,9 +70,10 @@ class DatabaseSeeder extends Seeder
             ->get();
 
         foreach ($sources as $source => $value) {
+            $dokter = User::where('username', $value->kd_dokter)->first();
             $data = [
                 'doctor_id' => $value->kd_dokter,
-                'slug' => DB::connection('db2')->table('dokter')->where('kd_dokter', $value->kd_dokter)->value('nm_dokter'),
+                'slug' => Str::slug($dokter->name),
                 'day' => $value->hari_kerja,
                 'start_at' => $value->jam_mulai,
                 'polyclinic_code' => $value->kd_poli,

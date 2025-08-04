@@ -14,6 +14,7 @@ class ScheduleApiService extends ApiService
     {
         return [
             Handlers\HasDoctorHandler::class,
+            Handlers\HasDoctorSlugHandler::class,
             Handlers\CreateHandler::class,
             Handlers\UpdateHandler::class,
             Handlers\DeleteHandler::class,
