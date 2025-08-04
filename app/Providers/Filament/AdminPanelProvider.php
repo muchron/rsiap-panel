@@ -60,7 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 ApiServicePlugin::make()
                     ->middleware([
-                        'apiKey' => \App\Http\Middleware\ApiKeyMiddleware::class,
+                        // 'apiKey' => \App\Http\Middleware\ApiKeyMiddleware::class,
                         // 'throttle:global'
                     ])
             ]);
