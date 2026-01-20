@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 
 class UserResource extends Resource
 {
@@ -25,8 +26,28 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('username')
-                    ->required(),
+                Forms\Components\Select::make('username')
+                    ->options(function () {
+                        return DB::connection('db2')
+                            ->table('pegawai')
+                            ->where('stts_aktif', 'AKTIF')
+                            ->get()
+                            ->mapWithKeys(function ($item) {
+                                return [$item->nik => "{$item->nik} - {$item->nama}"];
+                            })
+                            ->toArray();
+                    })
+                    ->preload()
+                    ->searchable()
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        $nama = DB::connection('db2')
+                            ->table('pegawai')
+                            ->where('nik', $state)
+                            ->value('nama');
+
+                        $set('name', $nama);
+                    }),
                 Forms\Components\TextInput::make('name')
                     ->required(),
                 Forms\Components\TextInput::make('phone')

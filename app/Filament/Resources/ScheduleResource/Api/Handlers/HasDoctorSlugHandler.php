@@ -49,6 +49,7 @@ class HasDoctorSlugHandler extends Handlers
                     return [
                         'slug' => $item->doctor->slug,
                         'name' => $item->doctor->user->name,
+                        'day' => $item->day,
                         'polyclinic' => $item->polyclinic->name,
                         'start_at' => $item->start_at,
                         'end_at' => $item->end_at

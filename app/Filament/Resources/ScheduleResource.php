@@ -8,6 +8,7 @@ use App\Models\Schedule;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -25,13 +26,17 @@ class ScheduleResource extends Resource
     {
         return $form
             ->schema([
-                // Forms\Components\TextInput::make('doctor_id')
-                //     ->required(),
 
                 Forms\Components\Select::make('doctor_id')
                     ->searchable()
                     ->preload()
                     ->options(User::where('username', 'like', '1.%')->pluck('name', 'username'))
+                    ->afterStateUpdated(function (Set $set, $state) {
+                        $name = User::where('username', $state)->first();
+                        $set('slug', str($name->name)->slug());
+                    })
+                    ->reactive()
+                    ->live(onBlur: true)
                     ->required(),
                 Forms\Components\Select::make('polyclinic_code')
                     ->name('polyclinic_code')
@@ -39,6 +44,7 @@ class ScheduleResource extends Resource
                     ->preload()
                     ->required()
                     ->options(\App\Models\Polyclinic::all()->pluck('name', 'code')),
+                Forms\Components\Hidden::make('slug'),
                 Forms\Components\Select::make('day')
                     ->options(
                         [
