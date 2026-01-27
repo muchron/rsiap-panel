@@ -13,14 +13,15 @@ class ScheduleApiService extends ApiService
     public static function handlers(): array
     {
         return [
+            Handlers\DayHandler::class,
             Handlers\HasDoctorHandler::class,
             Handlers\HasDoctorSlugHandler::class,
             Handlers\CreateHandler::class,
             Handlers\UpdateHandler::class,
             Handlers\DeleteHandler::class,
             Handlers\PaginationHandler::class,
-            Handlers\DetailHandler::class
+            Handlers\DetailHandler::class,
+            Handlers\DayHandler::class
         ];
-
     }
 }

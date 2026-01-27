@@ -11,8 +11,8 @@ use App\Filament\Resources\ScheduleResource\Api\Transformers\ScheduleTransformer
 
 class DetailHandler extends Handlers
 {
-    public static string | null $uri = '/{id}';
-    public static string | null $resource = ScheduleResource::class;
+    public static string|null $uri = '/{id}';
+    public static string|null $resource = ScheduleResource::class;
 
 
     /**
@@ -24,7 +24,7 @@ class DetailHandler extends Handlers
     public function handler(Request $request)
     {
         $id = $request->route('id');
-        
+
         $query = static::getEloquentQuery();
 
         $query = QueryBuilder::for(
@@ -32,7 +32,8 @@ class DetailHandler extends Handlers
         )
             ->first();
 
-        if (!$query) return static::sendNotFoundResponse();
+        if (!$query)
+            return static::sendNotFoundResponse();
 
         return new ScheduleTransformer($query);
     }

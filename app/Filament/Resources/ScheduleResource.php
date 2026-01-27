@@ -12,6 +12,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -124,6 +125,14 @@ class ScheduleResource extends Resource
             'index' => Pages\ListSchedules::route('/'),
             'create' => Pages\CreateSchedule::route('/create'),
             'edit' => Pages\EditSchedule::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getHandlers()
+    {
+        return [
+            \App\Filament\Resources\ScheduleResource\Api\Handlers\IndexHandler::class,
+            \App\Filament\Resources\ScheduleResource\Api\Handlers\DetailHandler::class,
         ];
     }
 
