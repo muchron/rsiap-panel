@@ -26,7 +26,7 @@ class UserFactory extends Factory
         $section1 = rand(1, 4);
         $section2 = rand(100, 599);
         $section3 = rand(1000, 9999);
-             return [
+        return [
             'name' => fake()->name(),
             'username' => "$section1.$section2.$section3",
             'phone' => fake()->unique()->phoneNumber(),
