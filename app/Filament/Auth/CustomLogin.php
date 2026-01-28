@@ -9,23 +9,6 @@ use Illuminate\Validation\ValidationException;
 
 class CustomLogin extends Login
 {
-    /**
-     * Create a new class instance.
-     */
-    protected function getForms(): array
-    {
-        return [
-            'form' => $this->form(
-                $this->makeForm()
-                    ->schema([
-                        $this->getLoginFormComponent(),
-                        $this->getPasswordFormComponent(),
-                        $this->getRememberFormComponent(),
-                    ])
-                    ->statePath('data'),
-            ),
-        ];
-    }
     protected function getLoginFormComponent(): Component
     {
         return TextInput::make('username')
