@@ -120,7 +120,10 @@ class ArticlesResource extends Resource
                         ->directory('cover')
                         ->visibility('public')
                         ->image()
-                        ->required(),
+                        ->required()
+                        // ->imagePreviewHeight('250')
+                        ->resize(50),
+                    // ->optimize('webp'),
 
                 ]),
 
