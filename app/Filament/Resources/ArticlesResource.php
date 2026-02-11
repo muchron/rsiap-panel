@@ -121,9 +121,11 @@ class ArticlesResource extends Resource
                         ->visibility('public')
                         ->image()
                         ->required()
-                        // ->imagePreviewHeight('250')
-                        ->resize(50),
-                    // ->optimize('webp'),
+                        ->imagePreviewHeight('250')
+                        ->resize(50)
+                        ->imageEditor()
+                        // ->shouldFetchFileInformation(false)
+                        ->optimize('webp'),
 
                 ]),
 
