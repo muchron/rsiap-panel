@@ -26,24 +26,32 @@ class DatabaseSeeder extends Seeder
     public static ?string $password;
     public function run(): void
     {
-        // Categories::factory()->count(10)->create();
-        // Labels::factory()->count(10)->create();
+        Categories::factory()->count(10)->create();
+        Labels::factory()->count(10)->create();
         $this->user();
 
-        // Articles::factory()->count(50)->create()->each(function ($article) {
-        //     $user = User::where('username', 'like', '1.%')->inRandomOrder()->first();
-        //     $article->user()->associate($user);
-        //     $article->save();
-        // });
+        Articles::factory()->count(50)->create()->each(function ($article) {
+            $user = User::where('username', 'like', '1.%')->inRandomOrder()->first();
+            $article->user()->associate($user);
+            $article->save();
+        });
 
-        // ArticleLabels::factory()->count(10)->create();
+
+
+        ArticleLabels::factory()->count(10)->create();
         ApiService::factory()->count(4)->create();
         $this->polyclinic();
         $this->schedule();
-        $specialistSeeder = new SpecialistSeeder();
-        $specialistSeeder->run();
-        $doctorSeeder = new DoctorSeeder();
-        $doctorSeeder->run();
+        // $specialistSeeder = new SpecialistSeeder();
+        // $specialistSeeder->run();
+        // $doctorSeeder = new DoctorSeeder();
+        // $doctorSeeder->run();
+
+        $this->call([
+            CarouselSeeder::class,
+            SpecialistSeeder::class,
+            DoctorSeeder::class
+        ]);
     }
     function user()
     {
