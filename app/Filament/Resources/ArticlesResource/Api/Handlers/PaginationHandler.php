@@ -29,6 +29,7 @@ class PaginationHandler extends Handlers
 
         $limit = request()->query('limit');
         $random = request()->boolean('random');
+        $category = request()->query('category');
 
         if ($random && $limit) {
             return $this->getRandomArticles($query, $limit);
@@ -36,6 +37,10 @@ class PaginationHandler extends Handlers
 
         if ($limit) {
             return $this->getLimitedArticles($query, $limit);
+        }
+
+        if ($category) {
+            return $this->getByCategory($query);
         }
 
         return $this->getPaginatedArticles($query);
@@ -82,4 +87,15 @@ class PaginationHandler extends Handlers
         return ArticlesTransformer::collection($data);
     }
 
+    protected function getByCategory($query)
+    {
+        $data = $query
+            ->whereHas('category', function ($query) {
+                $query->where('slug', request()->query('category'));
+            })
+            ->paginate(request()->query('per_page', 10))
+            ->appends(request()->query());
+
+        return ArticlesTransformer::collection($data);
+    }
 }
