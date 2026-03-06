@@ -30,6 +30,7 @@ class PolyclinicResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('code')->required(),
                 Forms\Components\TextInput::make('name')->required(),
+                Forms\Components\Textarea::make('desc'),
             ]);
     }
 
@@ -37,8 +38,9 @@ class PolyclinicResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('code')->sortable()->searchable(),
+                TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('desc'),
                 TextColumn::make('created_at')->dateTime()->sortable()->searchable(),
             ])
             ->filters([

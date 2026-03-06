@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('specialists', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('slug')->unique();
+            $table->boolean('is_polyclinic')->default(true);
             $table->string('name');
             $table->timestamps();
         });

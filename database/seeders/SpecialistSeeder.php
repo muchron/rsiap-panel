@@ -24,7 +24,9 @@ class SpecialistSeeder extends Seeder
                     [
                         'id' => $value->kd_sps,
                         'slug' => Str::slug($value->nm_sps),
-                        'name' => $value->nm_sps
+                        'name' => $value->nm_sps,
+                        'is_polyclinic' => true,
+
                     ]
                 );
             });

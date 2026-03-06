@@ -21,8 +21,9 @@ class SpecialistTransformer extends JsonResource
         return [
             'slug' => $this->slug,
             'name' => $this->name,
-            'doctors_count' => $this->doctor->count(),
-            'doctors' => $this->doctor->map(function ($doctor) {
+            'is_polyclinic' => $this->is_polyclinic,    
+            'doctors_count' => $this->doctors->count(),
+            'doctors' => $this->doctors->map(function ($doctor) {
                 return [
                     'id' => $doctor->doctor_id,
                     'name' => $doctor->user->name,

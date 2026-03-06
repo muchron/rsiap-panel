@@ -10,13 +10,18 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('polyclinics', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
             $table->string('name');
+            $table->enum('category', ['Nifas', 'Anak', 'Umum'])->default('Umum');
+            $table->string('class')->nullable();
             $table->string('slug')->unique();
-            $table->string('desc')->nullable();
-            $table->string('is_active')->default(1);
+            $table->text('desc')->nullable();
+            $table->integer('price');
+            $table->string('image')->default('default-kamar.jpg');
+            $table->json('features');
+            $table->string('color_theme')->default('blue');
+            $table->boolean('is_available')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +32,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('polyclinics');
+        Schema::dropIfExists('room');
     }
 };

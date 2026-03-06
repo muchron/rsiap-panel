@@ -6,9 +6,13 @@ use App\Filament\Resources\SpecialistResource\Pages;
 use App\Filament\Resources\SpecialistResource\RelationManagers;
 use App\Models\Specialist;
 use Filament\Forms;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -25,7 +29,20 @@ class SpecialistResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
+                    ->required()
+                    ->afterStateUpdated(function (callable $set, $state) {
+                        $set('slug', str()->slug($state));
+                    })
+                    ->live(onBlur: true),
+                TextInput::make('slug')
+                    ->required()
+                    ->dehydrated()
+                    ->readOnly() 
+                    ->unique(ignoreRecord: true),
+                Toggle::make('is_polyclinic')
+                    ->label('Poliklinik Aktif')
+                    ->default(true)
                     ->required(),
             ]);
     }
@@ -34,16 +51,35 @@ class SpecialistResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('ID')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('slug')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                TextColumn::make('doctors_count')
+                ->label('Jumlah Dokter')
+                ->counts('doctors')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('is_polyclinic')
+                    ->label('Poliklinik Aktif')
+                    ->badge()
+                    ->colors([
+                        'success' => 1,
+                        'danger' => 0,
+                    ])
+                    ->sortable()
+                    ->formatStateUsing(fn ($state) => $state ? 'Aktif' : 'Tidak Aktif'),
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -53,6 +89,7 @@ class SpecialistResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -50,7 +50,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CarouselSeeder::class,
             SpecialistSeeder::class,
-            DoctorSeeder::class
+            DoctorSeeder::class,
+            RoomSeeder::class,
         ]);
     }
     function user()

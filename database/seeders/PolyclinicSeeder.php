@@ -22,8 +22,10 @@ class PolyclinicSeeder extends Seeder
         foreach ($source as $key => $value) {
             $data = [
                 'code' => $value->kd_poli,
+                'desc' => 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
                 'slug' => Str::slug($value->nm_poli),
-                'name' => $value->nm_poli
+                'name' => $value->nm_poli,
+                'is_active' => 1
             ];
             Polyclinic::create($data);
         }
