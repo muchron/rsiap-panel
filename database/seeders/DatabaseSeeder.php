@@ -26,9 +26,15 @@ class DatabaseSeeder extends Seeder
     public static ?string $password;
     public function run(): void
     {
+        $this->user();        
+        $this->call([
+            CarouselSeeder::class,
+            SpecialistSeeder::class,
+            DoctorSeeder::class,
+            RoomSeeder::class,
+        ]);
         Categories::factory()->count(10)->create();
         Labels::factory()->count(10)->create();
-        $this->user();
 
         Articles::factory()->count(50)->create()->each(function ($article) {
             $user = User::where('username', 'like', '1.%')->inRandomOrder()->first();
@@ -47,12 +53,7 @@ class DatabaseSeeder extends Seeder
         // $doctorSeeder = new DoctorSeeder();
         // $doctorSeeder->run();
 
-        $this->call([
-            CarouselSeeder::class,
-            SpecialistSeeder::class,
-            DoctorSeeder::class,
-            RoomSeeder::class,
-        ]);
+      
     }
     function user()
     {

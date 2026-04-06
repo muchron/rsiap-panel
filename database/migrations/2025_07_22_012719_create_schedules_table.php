@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('doctor_id')->references('username')->on('users');
+            $table->foreign('doctor_id')->references('doctor_id')->on('doctors');
             $table->foreign('polyclinic_code')->references('code')->on('polyclinics');
         });
     }

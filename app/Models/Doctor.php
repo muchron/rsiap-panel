@@ -13,6 +13,10 @@ class Doctor extends Model
 
     protected $guarded = [];
 
+    protected $primaryKey = 'doctor_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     public function user()
     {
         return $this->hasOne(User::class, 'username', 'doctor_id');
@@ -27,8 +31,17 @@ class Doctor extends Model
         return $this->hasMany(Schedule::class, 'doctor_id', 'doctor_id');
     }
 
-    public function polyclinic()
+    public function polyclinics()
     {
-        return $this->belongsToMany(Polyclinic::class, 'schedules', 'doctor_id', 'polyclinic_code');
+        return $this->belongsToMany(
+            Polyclinic::class,
+            'schedules',
+            'doctor_id',
+            'polyclinic_code',
+            'doctor_id',
+            'code'
+        )
+            ->withPivot(['slug', 'day', 'start_at', 'end_at']) // Mengambil data jadwal
+            ->withTimestamps();
     }
 }

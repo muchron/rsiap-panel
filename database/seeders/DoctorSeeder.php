@@ -21,14 +21,18 @@ class DoctorSeeder extends Seeder
             ->where('kd_sps', '!=', '-')
             ->get()
             ->each(function ($value) {
-                $name = User::where('username', $value->kd_dokter)->first();
-                Doctor::create([
-                    'doctor_id' => $value->kd_dokter,
-                    'slug' => Str::slug($name->name),
-                    'specialist_id' => $value->kd_sps,
-                    'photo' => fake()->imageUrl(),
-                    'about' => fake()->sentences(50, true)
-                ]);
+                $user = User::where('username', $value->kd_dokter)->first();
+
+                // Jika user ditemukan, baru buat data dokternya
+                if ($user) {
+                    Doctor::create([
+                        'doctor_id' => $value->kd_dokter,
+                        'slug' => Str::slug($user->name),
+                        'specialist_id' => $value->kd_sps,
+                        'photo' => fake()->imageUrl(),
+                        'about' => fake()->sentences(3, true) // 50 kalimat mungkin terlalu panjang untuk seeder
+                    ]);
+                }
             });
     }
 }

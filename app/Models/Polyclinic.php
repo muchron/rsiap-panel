@@ -12,6 +12,10 @@ class Polyclinic extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
+    protected $primaryKey = 'code';      // Sesuaikan dengan ERD (kolom code)
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     public function schedules()
     {
         return $this->hasMany(Schedule::class, 'polyclinic_code', 'code');

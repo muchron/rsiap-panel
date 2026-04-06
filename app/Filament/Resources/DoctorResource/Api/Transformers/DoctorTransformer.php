@@ -32,6 +32,7 @@ class DoctorTransformer extends JsonResource
             ],
             'about' => $resource->about,
             'photo' => $resource->photo,
+            'polyclinic' => $resource->polyclinic,
             'schedule' => $resource->schedules()->get()->map(function (Schedule $schedule) use ($resource) {
                 return [
                     'day' => $schedule->day,
