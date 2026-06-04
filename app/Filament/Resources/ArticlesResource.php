@@ -115,6 +115,7 @@ class ArticlesResource extends Resource
                         ->inline()
                         ->inlineLabel(false)
                         ->required(),
+                    Forms\Components\DateTimePicker::make('created_at'),
                     Forms\Components\FileUpload::make('cover')
                         ->disk('public')
                         ->directory('cover')

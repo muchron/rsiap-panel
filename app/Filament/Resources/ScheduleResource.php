@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ScheduleResource\Pages;
 use App\Filament\Resources\ScheduleResource\RelationManagers;
+use App\Models\Doctor;
 use App\Models\Schedule;
 use App\Models\User;
 use Filament\Forms;
@@ -12,6 +13,7 @@ use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
@@ -68,14 +70,16 @@ class ScheduleResource extends Resource
                 Forms\Components\Toggle::make('is_active')
                     ->label('Aktif')
                     ->required(),
-            ]);
+            ])
+
+        ;
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('Doctor')
+                Tables\Columns\TextColumn::make('doctor')
                     ->formatStateUsing(function (Schedule $record) {
                         return $record->doctor?->user->name;
                     })
@@ -88,10 +92,6 @@ class ScheduleResource extends Resource
                     ->searchable(),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->afterStateUpdated(function ($state, $record) {
-                        // Logika tambahan jika diperlukan
-                        // Catatan: ToggleColumn sudah otomatis melakukan $record->save()
-                        // sehingga Anda tidak perlu memanggilnya lagi secara manual.
-            
                         Notification::make()
                             ->title('Status diperbarui')
                             ->body('Data ' . $record->name . ' sekarang ' . ($state ? 'aktif' : 'tidak aktif'))
@@ -115,6 +115,41 @@ class ScheduleResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                // Filter berdasarkan Dokter
+                SelectFilter::make('doctor_id')
+                    ->label('Dokter')
+                    ->relationship('doctor', 'id')
+                    ->searchable()
+                    ->preload()
+                    // 1. Logika untuk mencari nama saat user mengetik
+                    ->getSearchResultsUsing(function (string $search): array {
+                        return Doctor::whereHas('user', function ($query) use ($search) {
+                            $query->where('name', 'like', "%{$search}%");
+                        })
+                            ->with('user')
+                            ->orderBy('name', 'ASC')
+                            ->limit(50)
+                            ->get()
+                            ->mapWithKeys(fn($doctor) => [$doctor->id => $doctor->user->name])
+                            ->toArray();
+                    })
+                    // 2. Logika untuk menampilkan nama saat filter sudah dipilih (hydrate)
+                    ->getOptionLabelFromRecordUsing(fn($record) => $record->user->name ?? 'Tidak Diketahui')
+
+                    ->indicateUsing(function ($state): ?string {
+                        if (blank($state)) {
+                            return null;
+                        }
+                        $doctor = collect(Doctor::with('user')->find($state))->first();
+                        return $doctor ? 'Dokter: ' . $doctor?->user?->name : null;
+                    }),
+
+                // Filter berdasarkan Poliklinik
+                SelectFilter::make('polyclinic_id')
+                    ->relationship('polyclinic', 'name') // 'polyclinic' adalah nama relasi, 'name' adalah kolom yang ditampilkan
+                    ->label('Poliklinik')
+                    ->searchable()
+                    ->preload(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -125,7 +160,8 @@ class ScheduleResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+        ;
     }
 
     public static function getRelations(): array
