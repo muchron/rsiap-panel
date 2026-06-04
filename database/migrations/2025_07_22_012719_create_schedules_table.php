@@ -18,6 +18,8 @@ return new class extends Migration {
             $table->time('start_at');
             $table->time('end_at');
             $table->string('polyclinic_code');
+            $table->boolean('is_active')->default(true);
+
             $table->timestamps();
             $table->softDeletes();
 

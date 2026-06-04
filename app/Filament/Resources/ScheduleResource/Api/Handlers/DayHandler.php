@@ -23,6 +23,7 @@ class DayHandler extends Handlers
 
         $model = QueryBuilder::for($query)
             ->where('day', $hariInput)
+            ->where('is_active', true)
             ->with(['doctor.user', 'polyclinic'])
             ->orderByRaw("FIELD(day, 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU', 'MINGGU')")
             ->orderBy('start_at', 'asc')

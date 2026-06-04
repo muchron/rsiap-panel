@@ -9,6 +9,7 @@ use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -45,6 +46,7 @@ class ScheduleResource extends Resource
                     ->preload()
                     ->required()
                     ->options(\App\Models\Polyclinic::all()->pluck('name', 'code')),
+
                 Forms\Components\Hidden::make('slug'),
                 Forms\Components\Select::make('day')
                     ->options(
@@ -63,6 +65,9 @@ class ScheduleResource extends Resource
                     ->required(),
                 Forms\Components\TimePicker::make('end_at')
                     ->required(),
+                Forms\Components\Toggle::make('is_active')
+                    ->label('Aktif')
+                    ->required(),
             ]);
     }
 
@@ -79,9 +84,20 @@ class ScheduleResource extends Resource
                 Tables\Columns\TextColumn::make('polyclinic.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('day')
-
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->afterStateUpdated(function ($state, $record) {
+                        // Logika tambahan jika diperlukan
+                        // Catatan: ToggleColumn sudah otomatis melakukan $record->save()
+                        // sehingga Anda tidak perlu memanggilnya lagi secara manual.
+            
+                        Notification::make()
+                            ->title('Status diperbarui')
+                            ->body('Data ' . $record->name . ' sekarang ' . ($state ? 'aktif' : 'tidak aktif'))
+                            ->success()
+                            ->send();
+                    }),
                 Tables\Columns\TextColumn::make('start_at'),
                 Tables\Columns\TextColumn::make('end_at'),
                 Tables\Columns\TextColumn::make('created_at')
