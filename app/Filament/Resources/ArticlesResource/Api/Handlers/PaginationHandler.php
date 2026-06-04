@@ -81,6 +81,7 @@ class PaginationHandler extends Handlers
     protected function getPaginatedArticles($query)
     {
         $data = $query
+            ->orderByDesc('created_at')
             ->paginate(request()->query('per_page', 10))
             ->appends(request()->query());
 
@@ -93,6 +94,7 @@ class PaginationHandler extends Handlers
             ->whereHas('category', function ($query) {
                 $query->where('slug', request()->query('category'));
             })
+            ->orderByDesc('created_at')
             ->paginate(request()->query('per_page', 10))
             ->appends(request()->query());
 
